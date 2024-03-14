@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique @default(cuid())
+  f_name    String
+  l_name    String    @default("")
+  email     String    @unique
+  username  String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  actorEvents  Event[] @relation("ActorUser")
+  targetEvents Event[] @relation("TargetUser")
+  teams Team[]
+
+  @@index([slug])
+}
+
+model Event {
+  id           Int       @id @default(autoincrement())
+  slug         String    @unique @default(cuid())
+  createdAt    DateTime  @default(now())
+  event        EventType
+  actorId      Int
+  targetUserId Int?
+  incident     Incident? @relation("IncidentEvent")
+  actor        User      @relation("ActorUser", fields: [actorId], references: [id])
+  targetUser   User?     @relation("TargetUser", fields: [targetUserId], references: [id])
+
+  @@index([slug])
+}
+
+model Incident {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique @default(cuid())
+  createdAt    DateTime @default(now())
+  incidentType String
+  description  String
+  status       String
+  
+  eventId      Int      @unique
+  event        Event    @relation("IncidentEvent", fields: [eventId], references: [id])
+}
+
+model Team {
+  id Int @id @default(autoincrement())
+  name String
+  hash String
+
+  members User[]
+
+  @@unique([name, hash])
+}
+
+enum EventType {
+  LOGIN
+  LOGOUT
+  CREATE_INCIDENT
+  UPDATE_INCIDENT
+  DELETE_INCIDENT
+  EXIT_TEAM
+  REMOVE_TEAMMATE
+  ADD_TEAMMATE
+  CREATE_TEAM
+  UPDATE_TEAM
+  DELETE_TEAM
+  CREATE_USER
+  UPDATE_USER
+  DELETE_USER
+}
