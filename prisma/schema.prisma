@@ -37,13 +37,29 @@ model Event {
   slug         String    @unique @default(cuid())
   createdAt    DateTime  @default(now())
   event        EventType
+  isSuccessful Boolean   @default(true)
+  location     String
   actorId      Int
   targetUserId Int?
+  TeamId Int?
   incident     Incident? @relation("IncidentEvent")
   actor        User      @relation("ActorUser", fields: [actorId], references: [id])
   targetUser   User?     @relation("TargetUser", fields: [targetUserId], references: [id])
+  action       Action?
+  team         Team? @relation("TeamEvent", fields: [TeamId], references: [id])
 
   @@index([slug])
+}
+
+model Action{
+  id Int @id @default(autoincrement())
+  slug String @unique @default(cuid())
+  name String
+  eventId Int @unique
+  description String
+
+
+  event Event @relation(fields: [eventId], references: [id])
 }
 
 model Incident {
@@ -62,6 +78,9 @@ model Team {
   id Int @id @default(autoincrement())
   name String
   hash String
+
+  events Event[] @relation("TeamEvent")
+
 
   members User[]
 
