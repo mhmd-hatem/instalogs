@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  slug      String    @unique @default(cuid())
+  first_name    String
+  last_name    String    @default("")
+  email     String    @unique
+  username  String    @unique
+  password  String
+  token String?  @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?  @updatedAt
+  deletedAt DateTime?
+
+  actorEvents  Event[] @relation("ActorUser")
+  targetEvents Event[] @relation("TargetUser")
+  teams Team[]
+
+  @@index([slug])
+}
+
+model Event {
+  id           Int       @id @default(autoincrement())
+  slug         String    @unique @default(cuid())
+  createdAt    DateTime  @default(now())
+  isSuccessful Boolean   @default(true)
+  location     String
+  event        EventType
+
+  actorId      Int
+  targetUserId Int?
+  teamId Int?
+ 
+  incident     Incident? @relation("IncidentEvent")
+  actor        User      @relation("ActorUser", fields: [actorId], references: [id])
+  targetUser   User?     @relation("TargetUser", fields: [targetUserId], references: [id])
+  action       Action?
+  team         Team? @relation("TeamEvent", fields: [teamId], references: [id])
+
+  @@index([slug])
+}
+ 
+model Action{
+  id Int @id @default(autoincrement())
+  slug String @unique @default(cuid())
+  name String
+  eventId Int @unique
+  description String
+
+
+  event Event @relation(fields: [eventId], references: [id])
+}
+
+model Incident {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique @default(cuid())
+  createdAt    DateTime @default(now())
+  incidentType String
+  description  String
+  status       String
+  
+  eventId      Int      @unique
+  event        Event    @relation("IncidentEvent", fields: [eventId], references: [id])
+}
+
+model Team {
+  id Int @id @default(autoincrement())
+  name String
+  hash String
+
+  events Event[] @relation("TeamEvent")
+
+
+  members User[]
+
+  @@unique([name, hash])
+}
+
+enum EventType {
+  LOGIN
+  LOGOUT
+  GET_EVENTS
+  CREATE_INCIDENT
+  UPDATE_INCIDENT
+  DELETE_INCIDENT
+  EXIT_TEAM
+  REMOVE_TEAMMATE
+  ADD_TEAMMATE
+  CREATE_TEAM
+  UPDATE_TEAM
+  DELETE_TEAM
+  CREATE_USER
+  UPDATE_USER
+  DELETE_USER
+}

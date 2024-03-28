@@ -1,0 +1,8 @@
+// GET /events?page=0&limit=10
+// GET /events/search
+// POST /events
+// POST /users/login
+// POST /users/signup
+
+Event:
+

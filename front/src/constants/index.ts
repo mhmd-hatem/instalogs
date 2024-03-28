@@ -1,0 +1,17 @@
+export const eventTypes = {
+  LOGIN: "login",
+  LOGOUT: "logout",
+  GET_EVENTS: "get events",
+  CREATE_INCIDENT: "create incident",
+  UPDATE_INCIDENT: "update incident",
+  DELETE_INCIDENT: "delete incident",
+  EXIT_TEAM: "exit team",
+  REMOVE_TEAMMATE: "remove teammate",
+  ADD_TEAMMATE: "add teammate",
+  CREATE_TEAM: "create team",
+  UPDATE_TEAM: "update team",
+  DELETE_TEAM: "delete team",
+  CREATE_USER: "create user",
+  UPDATE_USER: "update user",
+  DELETE_USER: "delete user",
+};
