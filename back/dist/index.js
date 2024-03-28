@@ -25,7 +25,17 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.static(path_1.default.join(rootPath, "public")));
 app.use(express_1.default.json());
 app.use("/api", routes_1.default);
-app.get("/", (req, res) => {
+app.use("/assets", express_1.default.static(path_1.default.join(__dirname, "public/assets"), {
+    setHeaders: (res, path) => {
+        if (path.endsWith(".css")) {
+            res.setHeader("Content-Type", "text/css");
+        }
+        else if (path.endsWith(".js")) {
+            res.setHeader("Content-Type", "application/javascript");
+        }
+    },
+}));
+app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "public", "index.html"));
 });
 io.on("connection", (socket) => {
