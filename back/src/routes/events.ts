@@ -9,7 +9,7 @@ import {
 const router = Router();
 
 router.post("/search", searchEvents);
-router.post("/count", getEventsCount);
+router.get("/count", getEventsCount);
 router.route("/").get(getEvents).post(addEvent);
 
 export default router;
