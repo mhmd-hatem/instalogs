@@ -118,7 +118,7 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
   return (
     <div className="w-full bg-transparent flex flex-col max-h-full overflow-auto">
       <div className="bg-white flex flex-col h-full w-full">
-        <div className="w-full grid grid-cols-3 p-8 flex-1">
+        <div className="w-full grid grid-cols-3 p-6 flex-1">
           {(where?.actor?.email?.length ?? 0 <= 0 ? eventsSearch : events).map(
             (event) => (
               <EventEntry key={uuidv4()} event={event} />
@@ -156,7 +156,7 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
             </Button>
           )
         ) : (
-          <p className=" italic font-medium text-neutral-400 flex items-center justify-center w-full">
+          <p className=" italic font-medium font-mono text-neutral-300 pb-5 flex items-center justify-center w-full">
             {
               "SEEMS LIKE THERE ARE NO MORE EVENT RECORDS, YOU'VE OFFICIALLY SEEN IT ALL! ;)"
             }
