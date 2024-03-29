@@ -156,9 +156,9 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
             </Button>
           )
         ) : (
-          <p className=" italic font-semibold text-neutral-600">
+          <p className=" italic font-medium text-neutral-400 flex items-center justify-center w-full">
             {
-              "Seems like there are no more event records, you've officially seen it all! ;)"
+              "SEEMS LIKE THERE ARE NO MORE EVENT RECORDS, YOU'VE OFFICIALLY SEEN IT ALL! ;)"
             }
           </p>
         )}
