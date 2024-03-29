@@ -86,15 +86,15 @@ async function loginUser(req, res) {
             },
         });
         console.log(updatedUser.token, "token in user");
-        InstaLogs_1.default.getInstance().createEvent(req.ip, {
+        InstaLogs_1.default.getInstance().createEvent((0, utils_1.cleanupAddress)(req.ip), {
             event: "LOGIN",
             actorId: user.id,
-            isSuccessful: false,
+            isSuccessful: true,
             targetUserId: user.id,
             teamId: null,
             action: {
                 name: "user.login",
-                description: `User ${user.username} logged in successfully at ${new Date().toDateString()} at location: ${req.ip}`,
+                description: `User ${user.username} logged in successfully at ${new Date().toDateString()} at location: ${(0, utils_1.cleanupAddress)(req.ip)}`,
             },
         });
         //best practice: should send access token in body and storing refresh in cookies but given the simplicity and requirement, I m sending the refresh as access token
@@ -110,13 +110,13 @@ async function loginUser(req, res) {
         console.log(err);
         await InstaLogs_1.default.getInstance().createEvent((0, utils_1.cleanupAddress)(req.ip), {
             event: "CREATE_USER",
-            isSuccessful: true,
+            isSuccessful: false,
             actorId: user.id,
             targetUserId: user.id,
             teamId: null,
             action: {
                 name: "user.signup",
-                description: `User ${user.username ?? "unkown"} created successfully at ${user.createdAt} at location: ${req.ip}`,
+                description: `User ${user.username ?? "unkown"} login failed at ${user.createdAt} at location: ${(0, utils_1.cleanupAddress)(req.ip)}`,
             },
         });
         return res.status(500).json({
