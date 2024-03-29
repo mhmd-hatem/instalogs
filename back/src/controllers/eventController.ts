@@ -123,19 +123,13 @@ export async function getEvents(req: Request, res: Response) {
 }
 // GET /api/event/count
 export async function getEventsCount(req: Request, res: Response) {
-  const cursor = req.query.cursor
-    ? parseInt(req.query.cursor as string)
-    : undefined;
-  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
-  const where = req.body.where;
   try {
     const count: number = (await InstaLogs.getInstance().getEvents(
       req.body.user.id,
       cleanupAddress(req.ip as string),
       true,
       undefined,
-      undefined,
-      where
+      undefined
     )) as number;
 
     const newEvent = await InstaLogs.getInstance().createEvent(
@@ -151,7 +145,7 @@ export async function getEventsCount(req: Request, res: Response) {
           description: `Get events for user ${req.body.user.id} at ${req.ip} ${
             req.body.where
               ? JSON.stringify({ where: req.body.where })
-              : `all events page ${cursor ?? 1 / (limit ?? 1)}`
+              : `all events count`
           }`,
         },
       }
@@ -178,7 +172,7 @@ export async function getEventsCount(req: Request, res: Response) {
           description: `Get events for user ${req.body.user.id} at ${req.ip} ${
             req.body.where
               ? JSON.stringify({ where: req.body.where })
-              : `all events offset ${cursor ?? 0 / (limit ?? 1)}`
+              : `all events count`
           }`,
         },
       }

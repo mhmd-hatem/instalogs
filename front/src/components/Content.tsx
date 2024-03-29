@@ -126,7 +126,7 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
           )}
           {isLoading &&
             skeletonList.map(() => (
-              <React.Fragment key={uuidv4()}>
+              <div className="grid grid-cols-3 col-span-3 group w-full min-h-24 h-24">
                 <div className="flex gap-3 items-center h-7">
                   <Skeleton className="flex rounded-full w-7 h-7" />
                   <Skeleton className="h-5 w-4/5 rounded-sm" />
@@ -137,22 +137,30 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
                 <div className="flex items-center h-7">
                   <Skeleton className="h-5 w-2/5 rounded-sm" />
                 </div>
-              </React.Fragment>
+              </div>
             ))}
         </div>
-        {!where?.actor?.email && (
-          <Button
-            disabled={isLoading}
-            onPress={() => {
-              setIsLoading(!isLoading);
-              setCursor(data?.[data.length - 1].id ?? undefined);
-            }}
-            className={`bg-transparent col-span-3 bg-neutral-100 rounded-t-none font-semibold text-neutral-500 shadow-sm p-4 w-full min-h-[69px] items-center justify-center ${
-              isLoading && "hidden"
-            }`}
-          >
-            LOAD MORE
-          </Button>
+        {events.length > 0 && !(events[events.length - 1].id - 10 >= 0) ? (
+          !where?.actor?.email && (
+            <Button
+              disabled={isLoading}
+              onPress={() => {
+                setIsLoading(!isLoading);
+                setCursor(data?.[data.length - 1].id ?? undefined);
+              }}
+              className={`bg-transparent col-span-3 bg-neutral-100 rounded-t-none font-semibold text-neutral-500 shadow-sm p-4 w-full min-h-[69px] items-center justify-center ${
+                isLoading && "hidden"
+              }`}
+            >
+              LOAD MORE
+            </Button>
+          )
+        ) : (
+          <p className=" italic font-semibold text-neutral-600">
+            {
+              "Seems like there are no more event records, you've officially seen it all! ;)"
+            }
+          </p>
         )}
       </div>
     </div>

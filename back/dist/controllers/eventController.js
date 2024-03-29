@@ -107,13 +107,8 @@ async function getEvents(req, res) {
 exports.getEvents = getEvents;
 // GET /api/event/count
 async function getEventsCount(req, res) {
-    const cursor = req.query.cursor
-        ? parseInt(req.query.cursor)
-        : undefined;
-    const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-    const where = req.body.where;
     try {
-        const count = (await InstaLogs_1.default.getInstance().getEvents(req.body.user.id, (0, utils_1.cleanupAddress)(req.ip), true, undefined, undefined, where));
+        const count = (await InstaLogs_1.default.getInstance().getEvents(req.body.user.id, (0, utils_1.cleanupAddress)(req.ip), true, undefined, undefined));
         const newEvent = await InstaLogs_1.default.getInstance().createEvent((0, utils_1.cleanupAddress)(req.ip), {
             actorId: req.body.user.id,
             event: "GET_EVENTS",
@@ -124,7 +119,7 @@ async function getEventsCount(req, res) {
                 name: "get_events.count",
                 description: `Get events for user ${req.body.user.id} at ${req.ip} ${req.body.where
                     ? JSON.stringify({ where: req.body.where })
-                    : `all events page ${cursor ?? 1 / (limit ?? 1)}`}`,
+                    : `all events count`}`,
             },
         });
         return res.status(200).json({
@@ -146,7 +141,7 @@ async function getEventsCount(req, res) {
                 name: "get_events",
                 description: `Get events for user ${req.body.user.id} at ${req.ip} ${req.body.where
                     ? JSON.stringify({ where: req.body.where })
-                    : `all events offset ${cursor ?? 0 / (limit ?? 1)}`}`,
+                    : `all events count`}`,
             },
         });
         return res.status(500).json({
