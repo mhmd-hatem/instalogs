@@ -27,12 +27,12 @@ app.use(express_1.default.json());
 app.use("/api", routes_1.default);
 app.use("/assets", express_1.default.static(path_1.default.join(__dirname, "public/assets"), {
     setHeaders: (res, path) => {
-        if (path.endsWith(".css")) {
+        if (path.endsWith(".css"))
             res.setHeader("Content-Type", "text/css");
-        }
-        else if (path.endsWith(".js")) {
+        else if (path.endsWith(".js"))
             res.setHeader("Content-Type", "application/javascript");
-        }
+        else if (path.endsWith(".svg"))
+            res.setHeader("Content-Type", "image/svg+xml");
     },
 }));
 app.get("*", (req, res) => {

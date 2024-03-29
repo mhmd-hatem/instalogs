@@ -29,11 +29,11 @@ app.use(
   "/assets",
   express.static(path.join(__dirname, "public/assets"), {
     setHeaders: (res, path) => {
-      if (path.endsWith(".css")) {
-        res.setHeader("Content-Type", "text/css");
-      } else if (path.endsWith(".js")) {
+      if (path.endsWith(".css")) res.setHeader("Content-Type", "text/css");
+      else if (path.endsWith(".js"))
         res.setHeader("Content-Type", "application/javascript");
-      }
+      else if (path.endsWith(".svg"))
+        res.setHeader("Content-Type", "image/svg+xml");
     },
   })
 );

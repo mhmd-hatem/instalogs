@@ -140,7 +140,7 @@ export default function Content({ socket, setEventsRef, where }: ContentProps) {
               </div>
             ))}
         </div>
-        {events.length > 0 && !(events[events.length - 1].id - 10 >= 0) ? (
+        {events.length > 0 && events[events.length - 1].id - 10 >= 0 ? (
           !where?.actor?.email && (
             <Button
               disabled={isLoading}
