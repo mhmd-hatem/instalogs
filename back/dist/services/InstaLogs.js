@@ -48,17 +48,6 @@ class InstaLogs extends events_1.default {
         try {
             if (count) {
                 const events = await prismaProvider_1.default.event.count();
-                this.createEvent(location, {
-                    actorId,
-                    event: "GET_EVENTS",
-                    isSuccessful: true,
-                    targetUserId: null,
-                    teamId: null,
-                    action: {
-                        name: "get_events.count",
-                        description: `Get total events count for user ${actorId} at ${location}`,
-                    },
-                });
                 return events;
             }
             let AND = [];

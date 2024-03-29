@@ -127,19 +127,6 @@ export default class InstaLogs extends EventEmitter {
     try {
       if (count) {
         const events = await prisma.event.count();
-
-        this.createEvent(location, {
-          actorId,
-          event: "GET_EVENTS",
-          isSuccessful: true,
-          targetUserId: null,
-          teamId: null,
-          action: {
-            name: "get_events.count",
-            description: `Get total events count for user ${actorId} at ${location}`,
-          },
-        });
-
         return events;
       }
       let AND: any[] = [];

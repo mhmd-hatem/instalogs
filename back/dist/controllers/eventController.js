@@ -113,21 +113,7 @@ async function getEventsCount(req, res) {
     const limit = req.query.limit ? parseInt(req.query.limit) : 10;
     const where = req.body.where;
     try {
-        const events = (await InstaLogs_1.default.getInstance().getEvents(req.body.user.id, (0, utils_1.cleanupAddress)(req.ip), true, undefined, undefined, where));
-        if (!events[0]) {
-            return res.status(404).json({
-                error: {
-                    status: 404,
-                    message: "No Events Found...",
-                },
-                data: null,
-            });
-        }
-        const startIndex = cursor
-            ? events.findIndex((event) => event.id === cursor)
-            : 0;
-        const endIndex = startIndex + limit;
-        const eventsList = events.slice(startIndex, endIndex);
+        const count = (await InstaLogs_1.default.getInstance().getEvents(req.body.user.id, (0, utils_1.cleanupAddress)(req.ip), true, undefined, undefined, where));
         const newEvent = await InstaLogs_1.default.getInstance().createEvent((0, utils_1.cleanupAddress)(req.ip), {
             actorId: req.body.user.id,
             event: "GET_EVENTS",
@@ -135,7 +121,7 @@ async function getEventsCount(req, res) {
             targetUserId: null,
             teamId: null,
             action: {
-                name: "get_events",
+                name: "get_events.count",
                 description: `Get events for user ${req.body.user.id} at ${req.ip} ${req.body.where
                     ? JSON.stringify({ where: req.body.where })
                     : `all events page ${cursor ?? 1 / (limit ?? 1)}`}`,
@@ -144,7 +130,7 @@ async function getEventsCount(req, res) {
         return res.status(200).json({
             error: null,
             data: {
-                events: eventsList,
+                count,
             },
         });
     }
